@@ -7,8 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 public class TransactionController {
@@ -20,13 +22,12 @@ public class TransactionController {
     @GetMapping(value = "/transactions/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Transaction getTransactionById(@PathVariable int id) {
-        Optional<Transaction> transaction = Optional.of(transactionRepo.getById(id));
+        Transaction transaction = transactionRepo.getById(id);
 
-        if(!transaction.isPresent()) {
-            throw new IllegalArgumentException("Transaction ID does not match any transactions");
+        if(transaction != null) {
+            return transaction;
         }
-
-        return transaction.get();
+        throw new IllegalArgumentException();
     }
 
     // POST endpoint that creates a single transaction
@@ -40,28 +41,32 @@ public class TransactionController {
     // PUT endpoint that updates the transaction_value of a specific transaction determined by transaction Id
     @PutMapping(value = "/transactions/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateTransaction(@PathVariable("id") int id, @RequestBody double transaction_value) {
+    public void updateTransaction(@PathVariable("id") int id, @RequestBody Transaction transaction) {
 
-        Optional<Transaction> transaction = Optional.of(transactionRepo.getById(id));
+        Transaction transactionFromRepo = transactionRepo.getById(id);
 
-        if(!transaction.isPresent()) {
-            throw new IllegalArgumentException("Transaction ID does not match any transactions");
+        if(transactionFromRepo != null) {
+            transactionFromRepo.setTransaction_value(transaction.getTransaction_value());
+            transactionRepo.save(transactionFromRepo);
+            return;
         }
+        throw new IllegalArgumentException();
 
-        transactionRepo.updateTransactionValue(id, transaction_value);
     }
 
     // DELETE endpoint that “soft-deletes” a transaction
     @DeleteMapping("/transactions/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTransaction(@PathVariable("id") int id) {
-        Optional<Transaction> transaction = Optional.of(transactionRepo.getById(id));
 
-        if(!transaction.isPresent()) {
-            throw new IllegalArgumentException("Transaction ID does not match any transactions");
+        Transaction transaction = transactionRepo.getById(id);
+
+        if(transaction != null) {
+            transactionRepo.deleteById(id);
+            return;
         }
+        throw new IllegalArgumentException();
 
-        transactionRepo.deleteById(id);
     }
 
     // GET endpoint that returns all transactions from the database that are not soft-deleted
@@ -74,10 +79,11 @@ public class TransactionController {
     // GET endpoint that returns the sum of all transaction values for transactions that are not soft-deleted
     @GetMapping("/transactions/sum")
     @ResponseStatus(HttpStatus.OK)
-    public double calculateSum() {
+    public BigDecimal calculateSum() {
         List <Transaction> transactionList = transactionRepo.findAll();
-        double sum = transactionList.stream().mapToDouble(t -> t.getTransaction_value()).sum();
-        return sum;
+        BigDecimal sum = transactionList.stream().map(t -> t.getTransaction_value()).reduce(BigDecimal.ZERO,BigDecimal::add);
+
+        return sum.setScale(2, RoundingMode.UNNECESSARY);
     }
 
 }

@@ -6,6 +6,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -24,7 +25,7 @@ public class Transaction {
     private String recipient;
     private boolean soft_delete = Boolean.FALSE;
     @NotNull
-    private double transaction_value;
+    private BigDecimal transaction_value;
 
     public Integer getId() {
         return id;
@@ -58,11 +59,11 @@ public class Transaction {
         this.soft_delete = soft_delete;
     }
 
-    public double getTransaction_value() {
+    public BigDecimal getTransaction_value() {
         return transaction_value;
     }
 
-    public void setTransaction_value(double transaction_value) {
+    public void setTransaction_value(BigDecimal transaction_value) {
         this.transaction_value = transaction_value;
     }
 
@@ -71,7 +72,7 @@ public class Transaction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return soft_delete == that.soft_delete && Double.compare(that.transaction_value, transaction_value) == 0 && id.equals(that.id) && sender.equals(that.sender) && recipient.equals(that.recipient);
+        return soft_delete == that.soft_delete && id.equals(that.id) && sender.equals(that.sender) && recipient.equals(that.recipient) && transaction_value.equals(that.transaction_value);
     }
 
     @Override
