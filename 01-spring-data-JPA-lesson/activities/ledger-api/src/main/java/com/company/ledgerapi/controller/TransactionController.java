@@ -24,7 +24,7 @@ public class TransactionController {
     public Transaction getTransactionById(@PathVariable int id) {
         Transaction transaction = transactionRepo.getById(id);
 
-        if(transaction != null) {
+        if(transaction.getId() != null) {
             return transaction;
         }
         throw new IllegalArgumentException();
@@ -45,7 +45,7 @@ public class TransactionController {
 
         Transaction transactionFromRepo = transactionRepo.getById(id);
 
-        if(transactionFromRepo != null) {
+        if(transactionFromRepo.getId() != null) {
             transactionFromRepo.setTransaction_value(transaction.getTransaction_value());
             transactionRepo.save(transactionFromRepo);
             return;
@@ -61,7 +61,7 @@ public class TransactionController {
 
         Transaction transaction = transactionRepo.getById(id);
 
-        if(transaction != null) {
+        if(transaction.getId() != null) {
             transactionRepo.deleteById(id);
             return;
         }
