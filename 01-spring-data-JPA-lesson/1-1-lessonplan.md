@@ -24,7 +24,7 @@ This lesson assumes a foundational knowledge of the following topics:
 |1.3|Implementing Soft Delete Functionality|10 mins|35 mins|
 |1.4|Configuring Database|10 mins|45 mins|
 |1.5|Repository|10 mins|55 mins|
-|| Break|10 mins|65 |
+|| Break|10 mins|65 mins|
 |2.1|Test DAO|10 mins|75 mins|
 |2.2|Get All Transactions|10 mins|85 mins|
 |2.3|Get a Specific Transaction|15 mins|100 mins|
