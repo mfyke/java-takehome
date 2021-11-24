@@ -1,6 +1,7 @@
 package com.company.ledgerapi.dao;
 
 import com.company.ledgerapi.dto.Transaction;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +49,11 @@ public class TransactionRepositoryTest {
 
     }
 
+    @After
+    public void tearDown() {
+        transactionRepo.deleteAll();
+    }
+
     @Test
     public void shouldAddAndGetTransactionFromDatabase() {
         transaction1 = transactionRepo.save(transaction1);
@@ -58,16 +64,16 @@ public class TransactionRepositoryTest {
 
     @Test
     public void shouldDeleteTransactionFromDatabase() {
-        transaction1 = transactionRepo.save(transaction1);
-        transactionRepo.deleteById(transaction1.getId());
-        Optional<Transaction> fromRepo = transactionRepo.findById(transaction1.getId());
+        transaction2 = transactionRepo.save(transaction2);
+        transactionRepo.deleteById(transaction2.getId());
+        Optional<Transaction> fromRepo = transactionRepo.findById(transaction2.getId());
         assertFalse(fromRepo.isPresent());
     }
 
     @Test
     public void shouldFindTransactionById() {
-        transaction1 = transactionRepo.save(transaction1);
-        Optional<Transaction> fromRepo = transactionRepo.findById(transaction1.getId());
+        transaction3 = transactionRepo.save(transaction3);
+        Optional<Transaction> fromRepo = transactionRepo.findById(transaction3.getId());
         assertTrue(fromRepo.isPresent());
     }
 

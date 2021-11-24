@@ -22,12 +22,7 @@ public class TransactionController {
     @GetMapping(value = "/transactions/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Transaction getTransactionById(@PathVariable int id) {
-        Transaction transaction = transactionRepo.getById(id);
-
-        if(transaction.getId() != null) {
-            return transaction;
-        }
-        throw new IllegalArgumentException();
+        return transactionRepo.getById(id);
     }
 
     // POST endpoint that creates a single transaction
@@ -41,32 +36,21 @@ public class TransactionController {
     // PUT endpoint that updates the transaction_value of a specific transaction determined by transaction Id
     @PutMapping(value = "/transactions/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateTransaction(@PathVariable("id") int id, @RequestBody Transaction transaction) {
+    public void updateTransaction(@PathVariable int id, @RequestBody Transaction transaction) {
 
         Transaction transactionFromRepo = transactionRepo.getById(id);
 
         if(transactionFromRepo.getId() != null) {
             transactionFromRepo.setTransaction_value(transaction.getTransaction_value());
             transactionRepo.save(transactionFromRepo);
-            return;
         }
-        throw new IllegalArgumentException();
-
     }
 
     // DELETE endpoint that “soft-deletes” a transaction
     @DeleteMapping("/transactions/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTransaction(@PathVariable("id") int id) {
-
-        Transaction transaction = transactionRepo.getById(id);
-
-        if(transaction.getId() != null) {
-            transactionRepo.deleteById(id);
-            return;
-        }
-        throw new IllegalArgumentException();
-
+    public void deleteTransaction(@PathVariable int id) {
+        transactionRepo.deleteById(id);
     }
 
     // GET endpoint that returns all transactions from the database that are not soft-deleted
