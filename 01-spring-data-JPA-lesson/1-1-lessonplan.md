@@ -4,11 +4,11 @@
 
 ### Session Overview 
 
-In this lesson we will be learning Spring Data JPA. Spring Data JPA makes it exceptionally easy to setup and model database right in our Java code. This allows us to cut down on boilerplate and confusing setup and get to writing code!
+In this lesson, we will be learning Spring Data JPA. Spring Data JPA makes it exceptionally easy to set up and model databases right in our Java code. This allows us to cut down on boilerplate and confusing setup and get to writing code!
 
 This lesson assumes a foundational knowledge of the following topics:
 - Intro to programming and Java fundamentals
-- Basics of object-orident programming
+- Basics of object-oriented programming
 - Data structures, collections, and exception handling
 - SQL, Joins and normalization
 - Understanding of Restful APIs
